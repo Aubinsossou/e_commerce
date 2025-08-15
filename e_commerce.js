@@ -71,7 +71,7 @@ const Produit = {
             }
             else {
                 content = `<h1>Aucun produit disponible</h1>
-                        <a href="/add_produit.html">Ajouter de produit dans le localStorage</a>
+                        <a href="https://aubinsossou.github.io/e_commerce/add_produit.html">Ajouter de produit dans le localStorage</a>
                 `
             }
 
