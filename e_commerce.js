@@ -59,7 +59,7 @@ const Produit = {
                         <img src="${element.lien}" alt="" class="img_produit">
                     </div>
                     <div class="produit_item_part3">
-                        <h3>prix : ${element.price}</h3>
+                        <h3>prix : ${element.price} Fcfa</h3>
                         <h3>Stock: ${element.qte}</h3>
                         <div class="produit_content_part3_button">
                             <a class="button_panier" href="/formulaire_de_paiment.html?id=${element.id}">ajouter au panier</a>
@@ -70,14 +70,20 @@ const Produit = {
                 });
             }
             else {
-                content = `<h1>Aucun produit disponible</h1>`
+                content = `<h1>Aucun produit disponible</h1>
+                        <a href="https://aubinsossou.github.io/e_commerce/add_produit.html">Ajouter de produit dans le localStorage</a>
+                `
             }
 
             produit_tag.innerHTML = content
         }
     },
     add_produit_panier:()=>{   
-        
+        let produit_panier=JSON.parse(localStorage.getItem("Panier"))
+        if(!produit_panier){
+            localStorage.setItem("Panier",JSON.stringify([]))
+        }return JSON.parse(localStorage.getItem("Panier"))
+
     },
     paiement: () => {
         const name_paiement = document.getElementById("name_paiement")
