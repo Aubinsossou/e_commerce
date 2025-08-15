@@ -70,7 +70,9 @@ const Produit = {
                 });
             }
             else {
-                content = `<h1>Aucun produit disponible</h1>`
+                content = `<h1>Aucun produit disponible</h1>
+                        <a href="/add_produit.html">Ajouter de produit dans le localStorage</a>
+                `
             }
 
             produit_tag.innerHTML = content
