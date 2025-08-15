@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marketplace Démo</title>
+  <style>
+    :root{
+      --bg:#0f172a; /* slate-900 */
+      --panel:#111827; /* gray-900 */
+      --muted:#1f2937; /* gray-800 */
+      --soft:#374151; /* gray-700 */
+      --text:#e5e7eb; /* gray-200 */
+      --sub:#9ca3af; /* gray-400 */
+      --brand:#22c55e; /* green-500 */
+      --brand-2:#06b6d4; /* cyan-500 */
+      --danger:#ef4444; /* red-500 */
+      --shadow: 0 10px 25px rgba(0,0,0,.2);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#060b1a);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    header{position:sticky;top:0;z-index:50;background:rgba(17,24,39,.8);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .header-inner{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:16px 24px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px;border-radius:50%;background:conic-gradient(from 210deg,var(--brand),var(--brand-2));box-shadow:var(--shadow)}
+    .brand h1{margin:0;font-size:20px;letter-spacing:.3px}
+    .tools{display:grid;grid-template-columns:1fr 180px 160px auto;gap:12px;align-items:center;width:100%;max-width:800px}
+    .input,select{background:var(--muted);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:10px 12px;border-radius:12px;outline:none}
+    .input::placeholder{color:var(--sub)}
+    .btn{background:var(--brand);border:none;color:#062c18;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);transition:.2s transform}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--text)}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    @media (max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.tools{grid-template-columns:1fr 1fr 1fr auto}}
+    @media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}.tools{grid-template-columns:1fr auto;gap:8px}}
+    @media (max-width:460px){.grid{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .img{aspect-ratio:4/3;background:#0b1225;display:grid;place-items:center}
+    .img img{width:100%;height:100%;object-fit:cover}
+    .badge{position:absolute;margin:10px 10px 0 0;right:0;top:0;background:rgba(34,197,94,.15);color:#86efac;font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid rgba(34,197,94,.4)}
+    .content{padding:14px}
+    .title{font-size:16px;font-weight:700;margin:0 0 6px}
+    .sub{color:var(--sub);font-size:13px}
+    .price{display:flex;align-items:baseline;gap:8px;margin-top:8px}
+    .price .now{font-size:18px;font-weight:800}
+    .price .old{text-decoration:line-through;color:#94a3b8;font-size:12px}
+    .card .actions{display:flex;gap:8px;margin-top:auto;padding:14px}
+    .qty{display:inline-flex;align-items:center;gap:8px;background:var(--muted);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08)}
+    .chip{font-size:12px;color:var(--sub);background:rgba(255,255,255,.06);padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.08)}
+    footer{opacity:.6;text-align:center;padding:24px}
+
+    /* Cart drawer */
+    .drawer{position:fixed;right:0;top:0;height:100%;width:380px;max-width:100%;background:var(--panel);border-left:1px solid rgba(255,255,255,.08);transform:translateX(100%);transition:transform .25s ease;z-index:60;display:flex;flex-direction:column}
+    .drawer.open{transform:translateX(0)}
+    .drawer header{position:static;background:transparent;border:none;padding:16px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .cart-items{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:12px 16px}
+    .cart-row{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:8px;border-radius:12px}
+    .cart-row img{width:56px;height:42px;object-fit:cover;border-radius:8px}
+    .cart-footer{border-top:1px solid rgba(255,255,255,.08);padding:16px;display:flex;flex-direction:column;gap:10px}
+    .meta{display:flex;gap:8px;flex-wrap:wrap}
+    .toolbar{display:flex;gap:8px;align-items:center}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+    .cart-btn{position:relative}
+    .cart-count{position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;min-width:20px;height:20px;display:grid;place-items:center;border-radius:999px;font-size:12px;border:2px solid var(--panel)}
+    .empty{opacity:.7;text-align:center;padding:32px}
+    .link{color:#93c5fd;text-decoration:none}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner container">
+      <div class="brand">
+        <div class="logo" aria-hidden></div>
+        <h1>NeoMarket — Démo</h1>
+      </div>
+      <div class="tools">
+        <input id="search" class="input" placeholder="Rechercher un produit… (ex: rim, pneu)" />
+        <select id="category">
+          <option value="all">Toutes catégories</option>
+          <option value="Rims">Rims</option>
+          <option value="Tires">Tires</option>
+          <option value="Mini Tractors">Mini Tractors</option>
+          <option value="Accessories">Accessories</option>
+        </select>
+        <select id="sort">
+          <option value="featured">Tri: Pertinence</option>
+          <option value="price-asc">Prix: croissant</option>
+          <option value="price-desc">Prix: décroissant</option>
+          <option value="rating-desc">Note: élevée → basse</option>
+        </select>
+        <button id="openCart" class="btn cart-btn" title="Voir le panier">🛒 <span id="cartCount" class="cart-count" hidden>0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar" style="margin:16px 0;justify-content:space-between;flex-wrap:wrap">
+      <div class="meta">
+        <span class="pill" id="resultsInfo">0 produits</span>
+        <span class="pill">Livraison 48h</span>
+        <span class="pill">Retours 30j</span>
+      </div>
+      <div>
+        <button class="btn-ghost btn" id="clearFilters">Réinitialiser</button>
+      </div>
+    </div>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+  </main>
+
+  <footer>
+    Démo front-end sans backend. Données locales & panier persistant via localStorage.
+  </footer>
+
+  <!-- Cart Drawer -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <header class="header-inner" style="padding:12px 16px">
+      <strong>Votre panier</strong>
+      <div style="display:flex;gap:8px">
+        <button id="clearCart" class="btn-ghost btn">Vider</button>
+        <button id="closeCart" class="btn-ghost btn">Fermer</button>
+      </div>
+    </header>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-footer">
+      <div style="display:flex;justify-content:space-between"><span>Sous-total</span><strong id="subtotal">0</strong></div>
+      <div style="display:flex;justify-content:space-between"><span>Frais (est.)</span><span id="fees">2.50</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:18px"><span>Total</span><strong id="total">0</strong></div>
+      <button id="checkout" class="btn">Passer la commande</button>
+    </div>
+  </aside>
+
+<script>
+  // ===== Utils =====
+  const fmt = new Intl.NumberFormat('fr-FR', { style:'currency', currency:'EUR' })
+  const el = sel => document.querySelector(sel)
+  const els = sel => Array.from(document.querySelectorAll(sel))
+  const save = (k,v) => localStorage.setItem(k, JSON.stringify(v))
+  const load = (k,d=[]) => JSON.parse(localStorage.getItem(k) || JSON.stringify(d))
+
+  // quick placeholder image (inline SVG)
+  function ph(w=800,h=600,text='Produit'){
+    const t = encodeURIComponent(text)
+    const bg = '0b1225';
+    const fg = '22c55e';
+    return `data:image/svg+xml;utf8,`+
+      `<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}'>`+
+      `<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%23${bg}'/><stop offset='100%' stop-color='%23060b1a'/></linearGradient></defs>`+
+      `<rect width='100%' height='100%' fill='url(%23g)'/>`+
+      `<circle cx='68' cy='60' r='40' fill='%23${fg}' opacity='.3'/>`+
+      `<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23e5e7eb' font-family='Inter,Arial' font-size='26' opacity='.9'>${t}</text>`+
+      `</svg>`
+  }
+
+  // ===== Data (démo) =====
+  const PRODUCTS = [
+    {id:'r1', name:'Rim Forged 18"', price:219.99, oldPrice:259.99, category:'Rims', rating:4.7, stock:12, image:ph(800,600,'Rim 18')},
+    {id:'r2', name:'Rim Carbon 20"', price:349.00, category:'Rims', rating:4.9, stock:5, image:ph(800,600,'Rim 20')},
+    {id:'t1', name:'Pneu Route 205/55 R16', price:79.90, category:'Tires', rating:4.5, stock:40, image:ph(800,600,'Tire 16')},
+    {id:'t2', name:'Pneu Off-road 265/70 R17', price:139.00, category:'Tires', rating:4.4, stock:22, image:ph(800,600,'Off-road')},
+    {id:'m1', name:'Mini Tractor 24HP', price:4899.00, category:'Mini Tractors', rating:4.8, stock:3, image:ph(800,600,'Tractor 24HP')},
+    {id:'m2', name:'Mini Tractor 30HP', price:5599.00, category:'Mini Tractors', rating:4.9, stock:2, image:ph(800,600,'Tractor 30HP')},
+    {id:'a1', name:'Kit Écrous Sécurité', price:19.90, category:'Accessories', rating:4.3, stock:60, image:ph(800,600,'Kit Écrous')},
+    {id:'a2', name:'Compresseur Portable', price:39.90, category:'Accessories', rating:4.4, stock:25, image:ph(800,600,'Compresseur')},
+    {id:'a3', name:'Capteur Pression TPMS', price:24.90, category:'Accessories', rating:4.2, stock:18, image:ph(800,600,'TPMS')},
+    {id:'r3', name:'Rim FlowForm 19"', price:279.00, category:'Rims', rating:4.6, stock:9, image:ph(800,600,'Rim 19')},
+    {id:'t3', name:'Pneu Performance 225/45 R17', price:99.00, category:'Tires', rating:4.5, stock:30, image:ph(800,600,'Tire 17')},
+    {id:'a4', name:'Cric Hydraulique 2T', price:54.90, category:'Accessories', rating:4.7, stock:14, image:ph(800,600,'Cric 2T')}
+  ]
+
+  // ===== State =====
+  const state = {
+    q:'', category:'all', sort:'featured',
+    cart: load('demo.cart', {}) // id -> qty
+  }
+
+  // ===== Rendering =====
+  function render(){
+    const grid = el('#grid')
+    let items = PRODUCTS.filter(p =>
+      (!state.q || (p.name.toLowerCase().includes(state.q))) &&
+      (state.category==='all' || p.category===state.category)
+    )
+
+    if(state.sort==='price-asc') items.sort((a,b)=>a.price-b.price)
+    if(state.sort==='price-desc') items.sort((a,b)=>b.price-a.price)
+    if(state.sort==='rating-desc') items.sort((a,b)=>b.rating-a.rating)
+
+    el('#resultsInfo').textContent = `${items.length} produit${items.length>1?'s':''}`
+
+    grid.innerHTML = items.map(p=>Card(p)).join('')
+    bindCardButtons()
+    renderCartIcon()
+  }
+
+  function Card(p){
+    const inStock = p.stock>0
+    const badge = inStock ? `<span class="badge">En stock</span>` : `<span class="badge" style="background:rgba(239,68,68,.15);color:#fecaca;border-color:rgba(239,68,68,.4)">Rupture</span>`
+    const old = p.oldPrice?`<span class='old'>${fmt.format(p.oldPrice)}</span>`:''
+    return `
+    <article class="card" data-id="${p.id}">
+      <div class="img" style="position:relative">
+        <img alt="${p.name}" src="${p.image}" loading="lazy"/>
+        ${badge}
+      </div>
+      <div class="content">
+        <h3 class="title">${p.name}</h3>
+        <div class="sub">${p.category} • ⭐ ${p.rating.toFixed(1)}</div>
+        <div class="price"><span class="now">${fmt.format(p.price)}</span>${old}</div>
+      </div>
+      <div class="actions">
+        <button class="btn add" ${inStock?'':'disabled style="opacity:.5;cursor:not-allowed"'}>Ajouter</button>
+        <span class="chip">Stock: ${p.stock}</span>
+      </div>
+    </article>`
+  }
+
+  function bindCardButtons(){
+    els('.add').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const id = e.target.closest('.card').dataset.id
+        addToCart(id, 1)
+      })
+    })
+  }
+
+  // ===== Cart =====
+  function addToCart(id, qty){
+    state.cart[id] = (state.cart[id]||0) + qty
+    save('demo.cart', state.cart)
+    renderCartIcon();
+  }
+  function setQty(id, qty){
+    if(qty<=0){ delete state.cart[id] }
+    else{ state.cart[id]=qty }
+    save('demo.cart', state.cart)
+    renderCart();
+    renderCartIcon();
+  }
+  function removeItem(id){ delete state.cart[id]; save('demo.cart', state.cart); renderCart(); renderCartIcon(); }
+  function cartCount(){ return Object.values(state.cart).reduce((a,b)=>a+b,0) }
+  function cartItems(){ return Object.entries(state.cart).map(([id,qty])=>({ ...PRODUCTS.find(p=>p.id===id), qty })) }
+  function cartSubtotal(){ return cartItems().reduce((s,i)=>s+i.price*i.qty,0) }
+
+  function renderCartIcon(){
+    const c = el('#cartCount');
+    const n = cartCount();
+    c.textContent = n
+    c.hidden = n===0
+  }
+
+  function renderCart(){
+    const wrap = el('#cartItems')
+    const items = cartItems()
+    if(items.length===0){
+      wrap.innerHTML = `<div class='empty'>Votre panier est vide.<br><br><a class='link' href='#' id='discover'>Découvrir des produits</a></div>`
+      el('#subtotal').textContent = fmt.format(0)
+      el('#fees').textContent = fmt.format(2.50)
+      el('#total').textContent = fmt.format(2.50)
+      setTimeout(()=>{ const d=el('#discover'); if(d) d.onclick=(e)=>{e.preventDefault(); closeCart();}}, 0)
+      return
+    }
+
+    wrap.innerHTML = items.map(i=>`
+      <div class='cart-row' data-id='${i.id}'>
+        <img alt='' src='${i.image}'/>
+        <div>
+          <div style='display:flex;justify-content:space-between;gap:8px'>
+            <strong>${i.name}</strong>
+            <span>${fmt.format(i.price)}</span>
+          </div>
+          <div class='sub'>${i.category}</div>
+          <div style='display:flex;gap:6px;margin-top:8px;align-items:center'>
+            <button class='btn-ghost btn qminus'>−</button>
+            <span class='chip'>Qté: ${i.qty}</span>
+            <button class='btn-ghost btn qplus'>+</button>
+            <button class='btn-ghost btn' style='margin-left:auto;color:#fecaca;border-color:rgba(239,68,68,.35)' title='Supprimer'>🗑️</button>
+          </div>
+        </div>
+        <div><strong>${fmt.format(i.qty * i.price)}</strong></div>
+      </div>
+    `).join('')
+
+    el('#subtotal').textContent = fmt.format(cartSubtotal())
+    const fees = 2.5
+    el('#fees').textContent = fmt.format(fees)
+    el('#total').textContent = fmt.format(cartSubtotal()+fees)
+
+    // bind row buttons
+    els('.cart-row').forEach(row=>{
+      const id = row.dataset.id
+      row.querySelector('.qminus').onclick = ()=> setQty(id, (state.cart[id]||1)-1)
+      row.querySelector('.qplus').onclick = ()=> setQty(id, (state.cart[id]||0)+1)
+      row.querySelector('button[title="Supprimer"]').onclick = ()=> removeItem(id)
+    })
+  }
+
+  // ===== Drawer =====
+  const drawer = el('#drawer')
+  function openCart(){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); renderCart() }
+  function closeCart(){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true') }
+
+  // ===== Events =====
+  el('#openCart').addEventListener('click', openCart)
+  el('#closeCart').addEventListener('click', closeCart)
+  el('#checkout').addEventListener('click', ()=>{
+    alert('Merci pour votre commande ! (démo)')
+    state.cart={}; save('demo.cart', state.cart); renderCart(); renderCartIcon();
+  })
+  el('#clearCart').addEventListener('click', ()=>{ state.cart={}; save('demo.cart', state.cart); renderCart(); renderCartIcon(); })
+
+  el('#search').addEventListener('input', e=>{ state.q = e.target.value.trim().toLowerCase(); render() })
+  el('#category').addEventListener('change', e=>{ state.category = e.target.value; render() })
+  el('#sort').addEventListener('change', e=>{ state.sort = e.target.value; render() })
+  el('#clearFilters').addEventListener('click', ()=>{
+    state.q=''; state.category='all'; state.sort='featured';
+    el('#search').value=''; el('#category').value='all'; el('#sort').value='featured'; render()
+  })
+
+  // ===== Init =====
+  render();
+</script>
+</body>
+</html>
