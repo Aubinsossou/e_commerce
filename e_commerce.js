@@ -76,6 +76,9 @@ const Produit = {
             produit_tag.innerHTML = content
         }
     },
+    add_produit_panier:()=>{   
+        
+    },
     paiement: () => {
         const name_paiement = document.getElementById("name_paiement")
         const num_paiement = document.getElementById("num_paiement")
@@ -90,10 +93,6 @@ const Produit = {
         name_paiement.value = product.full_name
         price_paiement.value = product.price
         nombre_commande_paiement.value = product.qte
-
-
-
-
 
         if (button_paiement) {
             button_paiement.addEventListener("click", (e) => {
@@ -125,5 +124,4 @@ Produit.get_produit();
 Produit.add_produit();
 Produit.display_product();
 Produit.paiement();
-
-
+Produit.add_produit_panier();

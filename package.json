@@ -1,0 +1,23 @@
+{
+  "name": "e_commerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "e_commerce.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aubinsossou/e_commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aubinsossou/e_commerce/issues"
+  },
+  "homepage": "https://github.com/Aubinsossou/e_commerce#readme",
+  "dependencies": {
+    "fedapay": "^1.2.5"
+  }
+}
