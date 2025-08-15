@@ -117,7 +117,7 @@ const Produit = {
                     amount: parseInt(price_paiement.value),
                     currency: "XOF",
                     email: "test@example.com",
-                    publicKey: "PKSANDBOX_F2EFBEISUCB9GCZYLRTCL36WF3AW5TB5VNG8IMDIVG9QYUFX",
+                    publicKey: "PKLIVE_RS03ATRWYCRDCQFGMCTVWU9HU2MJNDQJO2NELUI73D43PRXT",
                     callback: "https://yourwebsite.com/callback"
                 });
 
