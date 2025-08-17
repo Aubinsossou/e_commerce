@@ -62,7 +62,7 @@ const Produit = {
                         <h3>prix : ${element.price} Fcfa</h3>
                         <h3>Stock: ${element.qte}</h3>
                         <div class="produit_content_part3_button">
-                            <a class="button_panier" href="/formulaire_de_paiment.html?id=${element.id}">ajouter au panier</a>
+                            <a class="button_panier" href="/e_commerce/formulaire_de_paiment.html?id=${element.id}">ajouter au panier</a>
                         </div>
                     </div>
                 </div>
