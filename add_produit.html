@@ -1,61 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="e_commerce.css">
-    <title>Site e-commerce</title>
+    <meta name="description" content="Site e-commerce premium - Découvrez nos produits">
+    <link rel="stylesheet" href="style.css">
+    <title>Boutique Premium - E-commerce</title>
 </head>
 
 <body>
+    <!-- Header avec Navigation -->
     <header class="header">
-    <h1>ajouter un produit</h1>
-        <span><img src="images/panier.png" alt="" class="icon"> <span>
-    </header>
-    <main class="main">
-
         <div class="container">
-            <div class="form_content">
-                <form id="addProduct" action="">
-                    <div class="form_item">
-                        <label for="name">Nom</label>
-                        <input type="text" name="name" id="full_name">
-                    </div>
-                    <div class="form_item">
-                        <label for="lien">Lien de l'image du produit</label>
-                        <input type="text" name="lien" id="lien">
-                    </div>
-                    <div class="form_item">
-                        <label for="price">Prix U.</label>
-                        <input type="number" name="price" id="price">
-                    </div>
-                    <div class="form_item">
-                        <label for="qte">Qte</label>
-                        <input type="number" name="qte" id="qte">
-                    </div>
-                    <div class="add_product_btn">
-                        <button id="add_product" type="submit">Soumettre</button>
-                    </div>
-                </form>
+            <nav class="navbar">
+                <div class="logo">
+                    <h1>Premium Store</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#accueil" class="nav-link active">Accueil</a></li>
+                    <li><a href="#produits" class="nav-link">Produits</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="cart-icon-wrapper" id="cartIconWrapper">
+                    <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Section Hero -->
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <h2 class="hero-title">Découvrez notre collection</h2>
+            <p class="hero-subtitle">Des produits de qualité premium sélectionnés pour vous</p>
+            <a href="#produits" class="hero-btn">Explorer les produits</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main" id="produits">
+        <div class="container">
+            <!-- Section Titre -->
+            <div class="section-header">
+                <h2 class="section-title">Nos Produits</h2>
+                <p class="section-subtitle">Une sélection exclusive pour vous</p>
             </div>
 
+            <!-- Grille des Produits -->
+            <div class="produits-grid" id="produitsGrid">
+                <!-- Les produits seront insérés ici par JavaScript -->
+            </div>
 
-            <!-- <div class="button_content">
-                <button class="button_content_1">précédent</button>
-                <button class="button_content_2">Suivant</button>
-    
-            </div> -->
-
+            <!-- Message si aucun produit -->
+            <div class="empty-products" id="emptyProducts" style="display: none;">
+                <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <h3>Aucun produit disponible</h3>
+                <p>Les produits seront bientôt ajoutés à notre catalogue</p>
+            </div>
         </div>
-
     </main>
-    <footer class="footer">
-        <h2>Copie@rightysvyjhsbudjuzgyidbhvsdhzd</h2>
+
+    <!-- Modal Panier -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal-overlay" id="cartModalOverlay"></div>
+        <div class="cart-modal-content">
+            <div class="cart-modal-header">
+                <h2>Mon Panier</h2>
+                <button class="cart-modal-close" id="cartModalClose">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="cart-modal-body" id="cartModalBody">
+                <!-- Contenu du panier inséré par JS -->
+            </div>
+
+            <div class="cart-modal-footer">
+                <div class="cart-total">
+                    <span>Total</span>
+                    <span class="cart-total-price" id="cartTotalPrice">0 FCFA</span>
+                </div>
+                <button class="cart-checkout-btn" id="cartCheckoutBtn">Valider la commande</button>
+                <button class="cart-clear-btn" id="cartClearBtn">Vider le panier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Paiement -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-modal-overlay" id="paymentModalOverlay"></div>
+        <div class="payment-modal-content">
+            <div class="payment-modal-header">
+                <h2>Finaliser votre commande</h2>
+                <button class="payment-modal-close" id="paymentModalClose">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="payment-modal-body">
+                <form class="payment-form" id="paymentForm">
+                    <div class="form-group">
+                        <label for="paymentName">Nom complet</label>
+                        <input type="text" id="paymentName" placeholder="Votre nom complet" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentPhone">Numéro de téléphone</label>
+                        <input type="tel" id="paymentPhone" placeholder="+229 XX XX XX XX" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentEmail">Email (optionnel)</label>
+                        <input type="email" id="paymentEmail" placeholder="votre@email.com">
+                    </div>
+
+                    <div class="order-summary">
+                        <h3>Récapitulatif de la commande</h3>
+                        <div id="orderSummaryItems"></div>
+                        <div class="order-total">
+                            <span>Montant total</span>
+                            <span id="orderTotalAmount">0 FCFA</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="payment-submit-btn" id="paymentSubmitBtn">
+                        Procéder au paiement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Premium Store</h3>
+                    <p>Votre boutique en ligne de confiance pour des produits de qualité.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="#accueil">Accueil</a></li>
+                        <li><a href="#produits">Produits</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: contact@premiumstore.com</p>
+                    <p>Tél: +229 XX XX XX XX</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Premium Store. Tous droits réservés.</p>
+            </div>
+        </div>
     </footer>
-    <script src="e_commerce.js"></script>
 
+    <!-- Script CashChapPay (SDK) -->
+    <script src="https://cdn.cashchap.com/cashchap.js"></script>
+    
+    <!-- Script principal -->
+    <script src="script.js"></script>
 </body>
-
 
 </html>
