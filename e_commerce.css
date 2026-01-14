@@ -1991,7 +1991,7 @@ ul {
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
-    background: var(--secondary-color);
+    background-color:#2563eb;
     color: var(--white);
     padding: var(--spacing-xs) var(--spacing-md);
     border-radius: var(--radius-md);
@@ -2005,7 +2005,7 @@ ul {
 }
 
 .hero-admin {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
+    background-color: #2563eb;
     color: var(--white);
     padding: var(--spacing-xl) 0;
     text-align: center;
