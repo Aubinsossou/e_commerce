@@ -79,7 +79,7 @@ const saveCart = (cart) => {
 const addToCart = (productId) => {
     const produits = getProduits();
     const cart = getCart();
-    
+
     // Trouver le produit
     const product = produits.find(p => p.id === productId);
     if (!product) {
@@ -89,7 +89,7 @@ const addToCart = (productId) => {
 
     // Vérifier si le produit est déjà dans le panier
     const existingItem = cart.find(item => item.id === productId);
-    
+
     if (existingItem) {
         // Vérifier le stock avant d'augmenter la quantité
         if (existingItem.quantity >= parseInt(product.qte)) {
@@ -110,7 +110,7 @@ const addToCart = (productId) => {
     }
 
     saveCart(cart);
-    
+
     // Animation de confirmation
     showNotification('Produit ajouté au panier !');
 };
@@ -122,9 +122,9 @@ const updateCartBadge = () => {
 
     const cart = getCart();
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
+
     cartBadge.textContent = totalItems;
-    
+
     // Animation du badge
     if (totalItems > 0) {
         cartBadge.style.display = 'flex';
@@ -141,14 +141,14 @@ const updateCartBadge = () => {
 const increaseQuantity = (productId) => {
     const cart = getCart();
     const item = cart.find(i => i.id === productId);
-    
+
     if (!item) return;
-    
+
     if (item.quantity >= item.maxStock) {
         alert('Stock maximum atteint !');
         return;
     }
-    
+
     item.quantity += 1;
     saveCart(cart);
     displayCart();
@@ -158,14 +158,14 @@ const increaseQuantity = (productId) => {
 const decreaseQuantity = (productId) => {
     const cart = getCart();
     const item = cart.find(i => i.id === productId);
-    
+
     if (!item) return;
-    
+
     if (item.quantity <= 1) {
         removeFromCart(productId);
         return;
     }
-    
+
     item.quantity -= 1;
     saveCart(cart);
     displayCart();
@@ -183,7 +183,7 @@ const removeFromCart = (productId) => {
 // Vider le panier
 const clearCart = () => {
     if (!confirm('Voulez-vous vraiment vider le panier ?')) return;
-    
+
     localStorage.setItem('Panier', JSON.stringify([]));
     updateCartBadge();
     displayCart();
@@ -262,7 +262,7 @@ const displayCart = () => {
 const openCartModal = () => {
     const cartModal = document.getElementById('cartModal');
     if (!cartModal) return;
-    
+
     displayCart();
     cartModal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -272,7 +272,7 @@ const openCartModal = () => {
 const closeCartModal = () => {
     const cartModal = document.getElementById('cartModal');
     if (!cartModal) return;
-    
+
     cartModal.classList.remove('active');
     document.body.style.overflow = '';
 };
@@ -280,18 +280,18 @@ const closeCartModal = () => {
 // Ouvrir la modal de paiement
 const openPaymentModal = () => {
     const cart = getCart();
-    
+
     if (cart.length === 0) {
         alert('Votre panier est vide !');
         return;
     }
-    
+
     const paymentModal = document.getElementById('paymentModal');
     if (!paymentModal) return;
-    
+
     // Remplir le récapitulatif de commande
     displayOrderSummary();
-    
+
     closeCartModal();
     paymentModal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -301,7 +301,7 @@ const openPaymentModal = () => {
 const closePaymentModal = () => {
     const paymentModal = document.getElementById('paymentModal');
     if (!paymentModal) return;
-    
+
     paymentModal.classList.remove('active');
     document.body.style.overflow = '';
 };
@@ -326,7 +326,7 @@ const displayOrderSummary = () => {
     });
 
     orderSummaryItems.innerHTML = html;
-    
+
     const total = calculateTotal();
     orderTotalAmount.textContent = `${formatPrice(total)} FCFA`;
 };
@@ -362,7 +362,7 @@ const processPayment = (e) => {
         alert('Erreur: Le système de paiement n\'est pas disponible. Veuillez réessayer plus tard.');
         console.error('CashChapPay SDK non chargé');
         return;
-    }
+    } 
 
     try {
         // Initialiser le paiement CashChapPay
@@ -373,23 +373,8 @@ const processPayment = (e) => {
             currency: "XOF",
             email: paymentEmail || "client@premiumstore.com",
             publicKey: "PKSANDBOX_F2EFBEISUCB9GCZYLRTCL36WF3AW5TB5VNG8IMDIVG9QYUFX",
-            callback: window.location.origin + "/payment-callback",
-            onSuccess: (response) => {
-                console.log('Paiement réussi:', response);
-                
-                // Vider le panier après paiement réussi
-                clearCart();
-                closePaymentModal();
-                
-                showNotification('Paiement effectué avec succès !');
-                
-                // Réinitialiser le formulaire
-                document.getElementById('paymentForm').reset();
-            },
-            onError: (error) => {
-                console.error('Erreur de paiement:', error);
-                alert('Erreur lors du paiement. Veuillez réessayer.');
-            }
+            callback: "https://yourwebsite.com/callback",
+            
         });
     } catch (error) {
         console.error('Erreur lors de l\'initialisation du paiement:', error);
@@ -438,7 +423,7 @@ const showNotification = (message) => {
 document.addEventListener('DOMContentLoaded', () => {
     // Afficher les produits
     displayProducts();
-    
+
     // Mettre à jour le badge du panier
     updateCartBadge();
 
