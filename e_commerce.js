@@ -21,11 +21,11 @@ const displayProducts = () => {
         produitsGrid.style.display = 'none';
         if (emptyProducts) emptyProducts.style.display = 'block';
         return;
-    }
+    }    produitsGrid.style.display = 'grid';
+
 
     // Cacher le message vide et afficher la grille
     if (emptyProducts) emptyProducts.style.display = 'none';
-    produitsGrid.style.display = 'grid';
 
     // Générer le HTML pour chaque produit
     let html = '';
@@ -114,6 +114,7 @@ const addToCart = (productId) => {
     // Animation de confirmation
     showNotification('Produit ajouté au panier !');
 };
+
 
 // Mettre à jour le badge du panier
 const updateCartBadge = () => {
@@ -382,9 +383,6 @@ const processPayment = (e) => {
     }
 };
 
-/* ===========================
-   NOTIFICATIONS
-   =========================== */
 
 // Afficher une notification temporaire
 const showNotification = (message) => {
